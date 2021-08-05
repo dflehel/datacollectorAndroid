@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "308646271783",
+    "project_id": "mibanddatacollector",
+    "storage_bucket": "mibanddatacollector.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308646271783:android:5a8ab3c893d4e567e76702",
+        "android_client_info": {
+          "package_name": "hu.obuda.university.mibanddatacolector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308646271783-quuf6mvoor300ld8s05f4p0qgd57qc9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqzJgaEVNJvWsjwV4bkRnrbHQEE2Y2nYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308646271783-quuf6mvoor300ld8s05f4p0qgd57qc9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
