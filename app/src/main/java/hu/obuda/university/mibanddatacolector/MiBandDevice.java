@@ -1,21 +1,25 @@
 package hu.obuda.university.mibanddatacolector;
 
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
 import java.nio.ByteBuffer;
+import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 public class MiBandDevice extends BluetoothGattCallback {
     private final MiBandServices services;
-    private final MiBandNotificationInterface notify;
+    private MiBandNotificationInterface notify;
+    UserInfo fakeUserInfo;
     public MiBandDevice(BluetoothGatt gatt, MiBandNotificationInterface notificationImplementation) throws Exception {
         services = new MiBandServices(gatt);
         notify = notificationImplementation;
@@ -25,6 +29,16 @@ public class MiBandDevice extends BluetoothGattCallback {
         }
         EnableNotifications();
 
+    }
+
+    public MiBandDevice(Context context, BluetoothDevice device) throws Exception {
+         services = new MiBandServices(device.connectGatt(context,true,this));
+         byte[] name = services.genericAccessService.deviceNameChar.getValue();
+         EnableNotifications();
+    }
+
+    public void setNotify(final MiBandNotificationInterface notify) {
+        this.notify = notify;
     }
 
     public int GetSteps(){
@@ -247,4 +261,7 @@ public class MiBandDevice extends BluetoothGattCallback {
 
     }
 
+    public void startHeartRateScan() {
+        services.heartRateService.sensorCPChar.setValue(new byte[] {21, 2, 1});
+    }
 }

@@ -200,4 +200,9 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
         savedata.put(Long.toString(time),data);
         db.collection(mauth.getUid().toString()).add(savedata);
     }
+
+    @Override
+    public void onCommSuccess(Object data) {
+        ;
+    }
 }

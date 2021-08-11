@@ -25,4 +25,5 @@ public interface MiBandNotificationInterface {
     void OnSelectedActivityStarted();
     void OnSelectedActivityPaused();
     void OnSelectOrFinishedActivity();
+    void onCommSuccess(Object data);
 }
