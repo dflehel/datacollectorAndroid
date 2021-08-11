@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
@@ -111,6 +112,8 @@ public class Log_ing extends AppCompatActivity {
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     Toast.makeText(Log_ing.this, "sikeresbe",
                                             Toast.LENGTH_SHORT).show();
+                                    Intent services = new Intent(Log_ing.this,ForgeGroundService.class);
+                                    startService(services);
                                 }
                             }
                         }
