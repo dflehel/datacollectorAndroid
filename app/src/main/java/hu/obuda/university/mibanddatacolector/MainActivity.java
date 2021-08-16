@@ -36,9 +36,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     Kafka c;
-    private BroadcastReceiver mNetworkReceiver;
-    private BroadcastReceiver mibanchek;
-    private BroadcastReceiver bluthotchek;
 
     public class Kafka {
         private final String topic;
@@ -108,12 +105,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mNetworkReceiver = new InternetCheking();
-        registerNetworkBroadcastForNougat();
-        mibanchek = new BluethotMibanCheking();
-        registerMibandCheckReciver();
-        bluthotchek = new BlueThoothIsOn();
-        registerBluethootCheckReciver();
         FirebaseMessaging.getInstance().subscribeToTopic("rendszeruzenet")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -155,44 +146,5 @@ public class MainActivity extends AppCompatActivity {
       //  this.c.produce();
     }
 
-    private void registerNetworkBroadcastForNougat() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        }
-    }
 
-    private void registerMibandCheckReciver() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
-            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
-            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-            registerReceiver(mibanchek, filter);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
-            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
-            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
-            registerReceiver(mibanchek, filter);
-        }
-    }
-
-    private void registerBluethootCheckReciver() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-            filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
-            registerReceiver(bluthotchek, filter);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-            filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
-            registerReceiver(bluthotchek, filter);
-        }
-    }
 }
