@@ -60,7 +60,7 @@ public class ForgeGroundService extends Service {
                         .setTicker("proba")
                         .build();
 
-        startForeground(1,notification);
+        startForeground(101,notification);
         mNetworkReceiver = new InternetCheking();
         registerNetworkBroadcastForNougat();
         mibanchek = new BluethotMibanCheking();
