@@ -1,5 +1,6 @@
 package hu.obuda.university.mibanddatacolector;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -24,9 +25,14 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
     Kafka c;
@@ -108,6 +114,18 @@ public class MainActivity extends AppCompatActivity {
         registerMibandCheckReciver();
         bluthotchek = new BlueThoothIsOn();
         registerBluethootCheckReciver();
+        FirebaseMessaging.getInstance().subscribeToTopic("rendszeruzenet")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        String msg = "sikerultfeliratkozni";
+                        if (!task.isSuccessful()) {
+                            msg = "nem sikerult feliratkozni";
+                        }
+                        Log.d(" Baj van", msg);
+                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
         // DBSession session = new AndroidDBSession(getApplicationContext());
         this.c = new Kafka("glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094", "yxgb6gct", "1Oz1lEzdDFJpLN_OOUWhhrY4NC_CQakl");
         Button logingbutton = (Button) findViewById(R.id.main_activity_log_in);
