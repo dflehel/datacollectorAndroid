@@ -6,7 +6,7 @@ import java.util.Map;
 public class DataCollector implements MiBandNotificationInterface, DatabeseSave {
 
     public DataCollector() {
-
+            Dataset.getInstance();
 
     }
 
@@ -14,7 +14,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnHeartRateReceived(int value) {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
@@ -22,7 +27,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
@@ -30,7 +40,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
@@ -38,7 +53,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
@@ -46,7 +66,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
@@ -54,7 +79,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
@@ -62,14 +92,24 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
     public void OnBatteryStatusChanged() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -77,7 +117,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnTimeChanged() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -85,7 +130,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnOutdoorRunningSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -93,7 +143,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnTreadmillSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -101,7 +156,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnCyclingSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -109,7 +169,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnIndoorCyclingSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -117,7 +182,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnWalkingSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -125,7 +195,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnFreestyleSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -133,7 +208,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnYogaSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -141,7 +221,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnJumpRopeSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -149,7 +234,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnRowingMachineSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -157,7 +247,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnEllipticalSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -165,7 +260,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnPoolSwimmingSelected() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -173,7 +273,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     public void OnSelectedActivityStarted() {
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
 
     }
 
@@ -182,7 +287,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override
@@ -190,7 +300,12 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
 
 
         MibandData data = new MibandData();
-        this.saveData(data);
+        if (Dataset.datasave==0){
+            this.saveData(data);
+        }
+        else{
+            Dataset.addData(data);
+        }
     }
 
     @Override

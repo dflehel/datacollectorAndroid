@@ -16,7 +16,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +30,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     Kafka c;
+    private BroadcastReceiver mNetworkReceiver;
+    private BroadcastReceiver mibanchek;
+    private BroadcastReceiver bluthotchek;
 
     public class Kafka {
         private final String topic;
@@ -93,7 +102,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // DBSession session = new AndroidDBSession(getApplicationContext());
+        mNetworkReceiver = new InternetCheking();
+        registerNetworkBroadcastForNougat();
+        mibanchek = new BluethotMibanCheking();
+        registerMibandCheckReciver();
+        bluthotchek = new BlueThoothIsOn();
+        registerBluethootCheckReciver();
+        // DBSession session = new AndroidDBSession(getApplicationContext());
         this.c = new Kafka("glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094", "yxgb6gct", "1Oz1lEzdDFJpLN_OOUWhhrY4NC_CQakl");
         Button logingbutton = (Button) findViewById(R.id.main_activity_log_in);
         logingbutton.setOnClickListener(new View.OnClickListener() {
@@ -120,5 +135,46 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         Toast.makeText(getApplicationContext(),"Now onStart() calls", Toast.LENGTH_LONG).show(); //onStart Called
       //  this.c.produce();
+    }
+
+    private void registerNetworkBroadcastForNougat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    private void registerMibandCheckReciver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+            registerReceiver(mibanchek, filter);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+            filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+            registerReceiver(mibanchek, filter);
+        }
+    }
+
+    private void registerBluethootCheckReciver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+            filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
+            registerReceiver(bluthotchek, filter);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
+            filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
+            registerReceiver(bluthotchek, filter);
+        }
     }
 }
