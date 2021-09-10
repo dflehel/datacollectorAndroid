@@ -19,7 +19,7 @@ final class MiBandServices {
     MiBandServices(BluetoothGatt gatt)
     {
         this.gatt = gatt;
-        gatt.discoverServices();
+        this.gatt.discoverServices();
         genericAccessService = new GenericAccessService();
         deviceInformationService = new DeviceInformationService();
         firmwareService = new FirmwareService();
