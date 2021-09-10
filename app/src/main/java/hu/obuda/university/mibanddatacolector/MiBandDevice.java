@@ -156,7 +156,7 @@ public class MiBandDevice extends BluetoothGattCallback {
         super.onCharacteristicChanged(gatt, characteristic);
         if (characteristic.getUuid().toString().equalsIgnoreCase(services.heartRateService.measurementNotifyChar.getUuid().toString())){
             // HR data received
-            notify.OnHeartRateReceived(services.heartRateService.measurementNotifyChar.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 0));
+            notify.OnHeartRateReceived(services.heartRateService.measurementNotifyChar.getValue()[1]);
         }
         else if (characteristic.getUuid().toString().equalsIgnoreCase(services.miBandService.activityChar.getUuid().toString())){
             // Step data received
