@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+        Dataset.getInstance();
         // c.consume();
     }
 

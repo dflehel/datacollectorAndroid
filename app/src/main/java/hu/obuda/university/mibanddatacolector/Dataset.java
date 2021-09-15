@@ -15,7 +15,7 @@ public final class Dataset implements DatabeseSave {
 
     }
     public static Dataset getInstance(){
-        if (dataset ==null){
+        if (dataset == null){
             dataset = new Dataset();
         }
         return dataset;
@@ -30,8 +30,9 @@ public final class Dataset implements DatabeseSave {
     }
 
     public static void saveDataset(){
-        for (MibandData data : mibandDataSet){
-            dataset.saveData(data);
+        if (dataset != null && mibandDataSet != null)
+            for (MibandData data : mibandDataSet){
+                dataset.saveData(data);
         }
     }
 
