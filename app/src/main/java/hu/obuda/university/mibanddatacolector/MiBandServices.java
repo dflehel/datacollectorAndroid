@@ -4,6 +4,7 @@ import java.util.UUID;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.os.SystemClock;
 
 final class MiBandServices {
     BluetoothGatt gatt;
@@ -16,11 +17,13 @@ final class MiBandServices {
     MiBandService miBandService;
     BatteryService batteryService;
 
-    MiBandServices(BluetoothGatt gatt)
-    {
+    MiBandServices(BluetoothGatt gatt) throws InterruptedException {
         this.gatt = gatt;
+        SystemClock.sleep(100);
         this.gatt.discoverServices();
+        SystemClock.sleep(100);
         genericAccessService = new GenericAccessService();
+        SystemClock.sleep(100);
         deviceInformationService = new DeviceInformationService();
         firmwareService = new FirmwareService();
         notificationService = new NotificationService();

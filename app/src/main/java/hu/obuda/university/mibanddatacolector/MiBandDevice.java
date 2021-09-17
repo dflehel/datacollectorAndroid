@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.content.Context;
 import android.os.Build;
+import android.os.SystemClock;
 
 import androidx.annotation.RequiresApi;
 
@@ -110,42 +111,56 @@ public class MiBandDevice extends BluetoothGattCallback {
             throw new Exception("The HR notification wasn't enabled.");
         //Step data
         services.gatt.setCharacteristicNotification(services.miBandService.activityChar, true);
+        SystemClock.sleep(500);
         descriptors = services.miBandService.activityChar.getDescriptors();
+        SystemClock.sleep(500);
         descriptors.get(0).setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+        //SystemClock.sleep(500);
         tmp=services.gatt.writeDescriptor(descriptors.get(0));
+        //SystemClock.sleep(500);
         if(!tmp)
             throw new Exception("The activity notification wasn't enabled.");
         //Notification data
         services.gatt.setCharacteristicNotification(services.miBandService.statusNotifyChar, true);
+        SystemClock.sleep(500);
         descriptors = services.miBandService.activityChar.getDescriptors();
+        SystemClock.sleep(500);
         descriptors.get(0).setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         tmp=services.gatt.writeDescriptor(descriptors.get(0));
         if(!tmp)
             throw new Exception("The status notification wasn't enabled.");
         //Battery level
         services.gatt.setCharacteristicNotification(services.batteryService.BatteryLevelChar, true);
+        SystemClock.sleep(500);
         descriptors = services.miBandService.activityChar.getDescriptors();
+        SystemClock.sleep(500);
         descriptors.get(0).setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         tmp = services.gatt.writeDescriptor(descriptors.get(0));
         if(!tmp)
             throw new Exception("The battery level changed notification wasn't enabled.");
         //Battery status
         services.gatt.setCharacteristicNotification(services.batteryService.BatteryLevelChar, true);
+        SystemClock.sleep(500);
         descriptors = services.miBandService.activityChar.getDescriptors();
+        SystemClock.sleep(500);
         descriptors.get(0).setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         tmp = services.gatt.writeDescriptor(descriptors.get(0));
         if(!tmp)
             throw new Exception("The battery status changed notification wasn't enabled.");
         //Time changed
         services.gatt.setCharacteristicNotification(services.miBandService.TimeChar, true);
+        SystemClock.sleep(500);
         descriptors = services.miBandService.TimeChar.getDescriptors();
+        SystemClock.sleep(500);
         descriptors.get(0).setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         tmp = services.gatt.writeDescriptor(descriptors.get(0));
         if(!tmp)
             throw new Exception("The time changed notification wasn't enabled.");
         //Select activity
         services.gatt.setCharacteristicNotification(services.miBandService.selectedActivityNotifyChar, true);
+        SystemClock.sleep(500);
         descriptors = services.miBandService.selectedActivityNotifyChar.getDescriptors();
+        SystemClock.sleep(500);
         descriptors.get(0).setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         tmp = services.gatt.writeDescriptor(descriptors.get(0));
         if(!tmp)
