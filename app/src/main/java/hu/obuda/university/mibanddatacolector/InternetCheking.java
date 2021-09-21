@@ -62,6 +62,7 @@ public class InternetCheking extends BroadcastReceiver {
                     Dataset.getInstance();
                     Dataset.clreaData();
                     showNotificationconected(context,intent,CHANNEL1);
+                    hu.obuda.university.mibanddatacolector.Settings.firststart = false;
                     return ;
                 }
                 else{
@@ -74,8 +75,9 @@ public class InternetCheking extends BroadcastReceiver {
                 onlie = false;
                 Dataset.getInstance();
                 Dataset.datasave =1;
-
-               // showNotificationdisconected(context,intent,CHANNEL1);
+                if (hu.obuda.university.mibanddatacolector.Settings.firststart) {
+                     showNotificationdisconected(context,intent,CHANNEL1);
+                }
             }
             //Thread.sleep(hu.obuda.university.mibanddatacolector.Settings.internetcheck*60*1000);
             //if (isOnline(context)&& !onlie){
@@ -97,9 +99,7 @@ public class InternetCheking extends BroadcastReceiver {
                                 showNotificationdisconected(context,intent,CHANNEL1);
                             }
 
-                            if(!isOnline(context)&& !hu.obuda.university.mibanddatacolector.Settings.online) {
-                                showNotificationdisconected(context,intent,CHANNEL1);
-                            }
+
                     }
                 }, hu.obuda.university.mibanddatacolector.Settings.internetcheck * 60 * 1000);
             }
