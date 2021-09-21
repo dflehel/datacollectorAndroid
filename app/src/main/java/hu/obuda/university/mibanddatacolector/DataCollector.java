@@ -13,6 +13,26 @@ public class DataCollector implements MiBandNotificationInterface, DatabeseSave 
     }
 
     @Override
+    public void Testdatagenerator() {
+        MibandData data = new MibandData();
+        data.setSensor("generalt");
+        data.setTimestamp(System.currentTimeMillis());
+        data.setValue("89");
+        data.setUserid(DatabeseSave.mauth.getUid());
+        if (Dataset.datasave==0){
+            this.saveData(data);
+            System.out.println("netenvagyok");
+            System.out.println(data);
+        }
+        else{
+            Dataset.addData(data);
+            System.out.println("neten nem vagyok");
+            System.out.println(data);
+        }
+
+    }
+
+    @Override
     public void OnHeartRateReceived(int value) {
 
         MibandData data = new MibandData();

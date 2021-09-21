@@ -78,6 +78,7 @@ public class Log_ing extends AppCompatActivity {
                 try {
                     miband = new MiBandDevice(this, device);
                     MiBandDevice finalMiband = miband;
+                    System.out.println("mibandmegvan");
                     miband.setNotify(new DataCollector() {
 
                         @Override
@@ -118,6 +119,7 @@ public class Log_ing extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                     Intent services = new Intent(Log_ing.this,ForgeGroundService.class);
                                     startService(services);
+                                    new Repeterwork();
                                 }
                             }
                         }

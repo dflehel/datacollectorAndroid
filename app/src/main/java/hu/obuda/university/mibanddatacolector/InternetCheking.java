@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,14 +32,21 @@ import androidx.core.app.NotificationCompat;
 import java.nio.channels.Channel;
 import java.util.Date;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import androidx.core.app.NotificationCompat;
+
+import static java.sql.DriverManager.getDriver;
 
 public class InternetCheking extends BroadcastReceiver {
     public static String CHANNEL_ID = "internetszolgaltatas";
     public static NotificationChannel CHANNEL1 = new NotificationChannel("megszunt","internetmegszunt", NotificationManager.IMPORTANCE_NONE);
     public static NotificationChannel CHANNEL2 = new NotificationChannel("ujrakapcsolodot","internetujravan", NotificationManager.IMPORTANCE_NONE);
     public static NotificationChannel CHANNEL3 = new NotificationChannel("letezik","internetletezik", NotificationManager.IMPORTANCE_NONE);
+
+    public static Timer timer;
 
 
 
@@ -47,28 +55,61 @@ public class InternetCheking extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         try
         {
+            boolean onlie;
             if (isOnline(context)) {
+                onlie = true;
                 if (Dataset.datasave ==0){
                     Dataset.getInstance();
                     Dataset.clreaData();
                     showNotificationconected(context,intent,CHANNEL1);
+                    return ;
                 }
                 else{
                     Dataset.getInstance();
                     Dataset.saveDataset();
-                    showNotificationreconected(context,intent,CHANNEL1);
+                    Dataset.clreaData();
+                  //  showNotificationreconected(context,intent,CHANNEL1);
                 }
             } else {
+                onlie = false;
                 Dataset.getInstance();
                 Dataset.datasave =1;
-                showNotificationdisconected(context,intent,CHANNEL1);
+
+               // showNotificationdisconected(context,intent,CHANNEL1);
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+            //Thread.sleep(hu.obuda.university.mibanddatacolector.Settings.internetcheck*60*1000);
+            //if (isOnline(context)&& !onlie){
+              //  showNotificationdisconected(context,intent,CHANNEL1);
+            //}
+            //if(!isOnline(context)&&onlie){
+             //   showNotificationreconected(context,intent,CHANNEL1);
+           // }
+            if (timer == null) {
+                hu.obuda.university.mibanddatacolector.Settings.online = isOnline(context);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                            if(isOnline(context)&&!hu.obuda.university.mibanddatacolector.Settings.online) {
+                                showNotificationreconected(context,intent,CHANNEL1);
+                            }
+                            if(!isOnline(context)&& hu.obuda.university.mibanddatacolector.Settings.online) {
+                                showNotificationdisconected(context,intent,CHANNEL1);
+                            }
+
+                            if(!isOnline(context)&& !hu.obuda.university.mibanddatacolector.Settings.online) {
+                                showNotificationdisconected(context,intent,CHANNEL1);
+                            }
+                    }
+                }, hu.obuda.university.mibanddatacolector.Settings.internetcheck * 60 * 1000);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
-
     }
+
+
+
     private boolean isOnline(Context context) {
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -110,7 +151,7 @@ public class InternetCheking extends BroadcastReceiver {
         }
         assert mNotificationManager != null;
         mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
-
+        timer = null;
 
 
     }
@@ -144,7 +185,7 @@ public class InternetCheking extends BroadcastReceiver {
         }
         assert mNotificationManager != null;
         mNotificationManager.notify(2 /* Request Code */, mBuilder.build());
-
+        timer = null;
 
     }
 
@@ -177,7 +218,7 @@ public class InternetCheking extends BroadcastReceiver {
         }
         assert mNotificationManager != null;
         mNotificationManager.notify(1 /* Request Code */, mBuilder.build());
-
+        timer = null;
 
 
 
@@ -280,4 +321,5 @@ public class InternetCheking extends BroadcastReceiver {
 
 
     }
+
 }

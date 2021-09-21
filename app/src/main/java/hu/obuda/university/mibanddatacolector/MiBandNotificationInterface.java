@@ -2,6 +2,7 @@ package hu.obuda.university.mibanddatacolector;
 
 public interface MiBandNotificationInterface {
 
+    void Testdatagenerator();
     void OnHeartRateReceived(int value);
     void OnMovingActivity(int stepValue, int calories, int distance);
     void OnSleepStartedOrBraceletWear();

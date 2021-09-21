@@ -33,9 +33,12 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 public class MainActivity extends AppCompatActivity {
     Kafka c;
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
     public class Kafka {
         private final String topic;
@@ -119,6 +122,30 @@ public class MainActivity extends AppCompatActivity {
                 });
         // DBSession session = new AndroidDBSession(getApplicationContext());
         this.c = new Kafka("glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094", "yxgb6gct", "1Oz1lEzdDFJpLN_OOUWhhrY4NC_CQakl");
+        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(10*3600)
+                .build();
+        mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
+        mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
+        mFirebaseRemoteConfig.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
+            @Override
+            public void onComplete(@NonNull Task<Boolean> task) {
+                if (task.isSuccessful()) {
+                    boolean updated = task.getResult();
+                    Log.d(" megjottek", "Config params updated: " + updated);
+                    Toast.makeText(MainActivity.this, "Fetch and activate succeeded",
+                            Toast.LENGTH_SHORT).show();
+                    //System.out.println(mFirebaseRemoteConfig.getDouble("munitesforinternetcheck"));
+                   // System.out.println(mFirebaseRemoteConfig.getDouble("timeforwaittoreques"));
+                    Settings.internetcheck = new Double(mFirebaseRemoteConfig.getDouble("munitesforinternetcheck")).intValue();
+                    Settings.bluethotconnection = new Double(mFirebaseRemoteConfig.getDouble("timeforwaittoreques")).intValue();
+                } else {
+                    Toast.makeText(MainActivity.this, "Fetch failed",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         Button logingbutton = (Button) findViewById(R.id.main_activity_log_in);
         logingbutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
