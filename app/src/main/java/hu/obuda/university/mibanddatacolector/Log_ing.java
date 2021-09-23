@@ -119,7 +119,7 @@ public class Log_ing extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                     Intent services = new Intent(Log_ing.this,ForgeGroundService.class);
                                     startService(services);
-                                    new Repeterwork();
+                                    //new Repeterwork();
                                 }
                             }
                         }
