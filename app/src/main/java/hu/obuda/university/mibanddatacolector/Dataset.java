@@ -1,5 +1,7 @@
 package hu.obuda.university.mibanddatacolector;
 
+import com.google.firebase.firestore.SetOptions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +43,6 @@ public final class Dataset implements DatabeseSave {
         Map savedata = new HashMap<String,Object>();
         long time = System.currentTimeMillis();
         savedata.put(Long.toString(time),data);
-        db.collection(mauth.getUid().toString()).add(savedata);
+        db.collection(mauth.getUid().toString()).document(data.getSensor()).set(savedata, SetOptions.mergeFields(Long.toString(time)));
     }
 }

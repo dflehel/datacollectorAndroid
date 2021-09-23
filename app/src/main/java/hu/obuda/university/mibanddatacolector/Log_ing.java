@@ -57,47 +57,47 @@ public class Log_ing extends AppCompatActivity {
         //  mBluetoothAdapter = mBluetoothManager.getAdapter();
         // mBluetoothMi = mBluetoothAdapter.getRemoteDevice("E5:3B:9C:41:37:0B");
         // Kibővítve egy BL scannerrel, hogy ne csak egyetlen Mi Band-re működjön.
-        final BluetoothManager bluetooothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
+      //  final BluetoothManager bluetooothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
         // Erre ezért volt szükség, mert ha nem volt bekapcsolva akkor egyszerűen tovább lépett rajta az app.
-        if(!bluetooothManager.getAdapter().isEnabled()){
-            bluetooothManager.getAdapter().enable();
-        }
+       // if(!bluetooothManager.getAdapter().isEnabled()){
+        //    bluetooothManager.getAdapter().enable();
+        //}
         // Ez az implementáció csak Mi Band-eket keres ezért ennek az ellenörzését lent kivettem.
 
-        List<BluetoothDevice> gattServerConnectedDevices = bluetooothManager.getConnectedDevices(BluetoothProfile.GATT_SERVER);
-        for (BluetoothDevice device : gattServerConnectedDevices) {
-            if(device.getName().contains("Mi Smart Band"))
-            bluetoothDevice = device;
+        //List<BluetoothDevice> gattServerConnectedDevices = bluetooothManager.getConnectedDevices(BluetoothProfile.GATT_SERVER);
+        //for (BluetoothDevice device : gattServerConnectedDevices) {
+          //  if(device.getName().contains("Mi Smart Band"))
+           // bluetoothDevice = device;
             // bluetoothGatt = device.connectGatt(this,true,bluetoothGattCallback);
             // A MiBandServices felügyeli.
             //HashMap<UUID,String> MIBAND_DEBUG = new HashMap<>();
 
             //MIBAND_DEBUG.put(UUID.fromString("00002a39-0000-1000-8000-00805f9b34fb"), "Heart Rate Control Point");
             //MIBAND_DEBUG.put(UUID.fromString("00002a37-0000-1000-8000-00805f9b34fb"), "Heart Rate Measurement");
-                MiBandDevice miband = null;
-                try {
-                    miband = new MiBandDevice(this, device);
-                    MiBandDevice finalMiband = miband;
-                    System.out.println("mibandmegvan");
-                    miband.setNotify(new DataCollector() {
+            //    MiBandDevice miband = null;
+             //   try {
+              //      miband = new MiBandDevice(this, device);
+               //     MiBandDevice finalMiband = miband;
+                //    System.out.println("mibandmegvan");
+                 //   miband.setNotify(new DataCollector() {
 
-                        @Override
-                        public void onCommSuccess(Object data) {
-                            Log.d("login", "connect success");
-                            long hi = device.getUuids()[0].getUuid().getMostSignificantBits();
-                            long lo = device.getUuids()[0].getUuid().getLeastSignificantBits();
-                            byte[] bytes = ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
-                            BigInteger big = new BigInteger(bytes);
-                            String numericUuid = big.toString().replace('-', '1'); // just in case
-                            UserInfo userInfo = new UserInfo(big.intValue(), 1, 32, 180, 55, "胖梁", 0);
-                            finalMiband.fakeUserInfo = userInfo;
-                            finalMiband.startHeartRateScan();
+                   //     @Override
+                    //    public void onCommSuccess(Object data) {
+                      //      Log.d("login", "connect success");
+                        //    long hi = device.getUuids()[0].getUuid().getMostSignificantBits();
+                         //   long lo = device.getUuids()[0].getUuid().getLeastSignificantBits();
+                         //   byte[] bytes = ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
+                         //   BigInteger big = new BigInteger(bytes);
+                          //  String numericUuid = big.toString().replace('-', '1'); // just in case
+                         //   UserInfo userInfo = new UserInfo(big.intValue(), 1, 32, 180, 55, "胖梁", 0);
+                          //  finalMiband.fakeUserInfo = userInfo;
+                          //  finalMiband.startHeartRateScan();
 
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }}
+                        //}
+                   // });
+             //   } catch (Exception e) {
+               //     e.printStackTrace();
+               // }}
 
                 setContentView(R.layout.log_in);
         EditText email = (EditText) findViewById(R.id.log_in_activity_email_text);
