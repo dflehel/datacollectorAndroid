@@ -192,13 +192,6 @@ public class MainActivity extends AppCompatActivity {
                // Settings.mainActivity.textView.setText("jelenleg nincs bejelentkezve");
             }
         });
-        // c.consume();
-    }
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
         Settings.mainActivity = this;
         FirebaseAuth  mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -207,9 +200,9 @@ public class MainActivity extends AppCompatActivity {
             int count = 0;
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
                 if ("hu.obuda.university.mibanddatacolector.ForgeGroundService".equals(service.service.getClassName()) ==false ) {
-                   count = count+1;
-                   // return true;
-                System.out.println(service.service.getClassName());
+                    count = count+1;
+                    // return true;
+                    System.out.println(service.service.getClassName());
                 }
                 else{
                     //System.out.println("sfhudsivdpufeqhpfeiphh");
@@ -223,11 +216,19 @@ public class MainActivity extends AppCompatActivity {
                 //System.out.println("dhisdgvvjldsl");
             }
             //return false;
-           // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
-           // startService(services);
+            // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
+            // startService(services);
             //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
             Settings.mainActivity.textView.setText("mukodik");
         }
+        // c.consume();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
         Toast.makeText(getApplicationContext(),"Now onStart() calls", Toast.LENGTH_LONG).show(); //onStart Called
       //  this.c.produce();
     }
