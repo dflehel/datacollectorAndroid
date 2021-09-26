@@ -276,6 +276,10 @@ public class MiBandDevice extends BluetoothGattCallback {
 
     }
 
+    public MiBandNotificationInterface getNotify() {
+        return notify;
+    }
+
     public void startHeartRateScan() {
         services.heartRateService.sensorCPChar.setValue(new byte[] {21, 2, 1});
     }

@@ -45,11 +45,13 @@ public class ForgeGroundService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_off_round);
     }
 
     @Override
     public int onStartCommand(Intent intent,int flags,int stratId){
         BluetoothDevice bluetoothDevice;
+//        Settings.mainActivity.imageView
         final BluetoothManager bluetooothManager = (BluetoothManager)getSystemService(Context.BLUETOOTH_SERVICE);
         // Erre ezért volt szükség, mert ha nem volt bekapcsolva akkor egyszerűen tovább lépett rajta az app.
         if(!bluetooothManager.getAdapter().isEnabled()){
@@ -72,7 +74,8 @@ public class ForgeGroundService extends Service {
                 miband = new MiBandDevice(this, device);
                 MiBandDevice finalMiband = miband;
                 System.out.println("mibandmegvan");
-                miband.setNotify(new DataCollector() {
+
+                miband.setNotify(new DataCollector(getApplicationContext()) {
 
                     @Override
                     public void onCommSuccess(Object data) {
@@ -88,6 +91,7 @@ public class ForgeGroundService extends Service {
 
                     }
                 });
+                Settings.dataCollector = (DataCollector) miband.getNotify();
             } catch (Exception e) {
                 e.printStackTrace();
             }}
@@ -115,6 +119,8 @@ public class ForgeGroundService extends Service {
         registerMibandCheckReciver();
         bluthotchek = new BlueThoothIsOn();
         registerBluethootCheckReciver();
+        new hrgather();
+        Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_on_round);
         return START_REDELIVER_INTENT;
     }
     private void registerNetworkBroadcastForNougat() {

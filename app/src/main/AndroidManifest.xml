@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
@@ -46,6 +48,13 @@
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
                 <action android:name="android.bluetooth.adapter.action.CONNECTION_STATE_CHANGED" />
             </intent-filter>
+        </receiver>
+        <receiver android:name=".HrBroadcastReciver" android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="hu.obuda.university.mibanddatacolector.intent.action.HR" />
+            </intent-filter>
+
         </receiver>
         <service
             android:name=".CloudMessaginService"

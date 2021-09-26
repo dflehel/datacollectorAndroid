@@ -6,6 +6,8 @@ public class Settings {
     public static int bluethotconnection = 0;
     public static boolean online;
     public static boolean firststart = true;
+    public static MainActivity mainActivity;
+    public static DataCollector dataCollector;
 
 
 }

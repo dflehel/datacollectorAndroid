@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.Set;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -28,10 +29,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
@@ -39,10 +44,14 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 public class MainActivity extends AppCompatActivity {
     Kafka c;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    public ImageView imageView;
+    public TextView textView;
+    private HrBroadcastReciver hrBroadcastReciver;
 
     public class Kafka {
         private final String topic;
         private final HashMap<String, Object> props;
+
 
         public Kafka(String brokers, String username, String password) {
             this.topic = "yxgb6gct-coinnok";
@@ -163,6 +172,24 @@ public class MainActivity extends AppCompatActivity {
 
         });
         Dataset.getInstance();
+        this.imageView = (ImageView) findViewById(R.id.imageView_on_off);
+        this.textView = (TextView) findViewById(R.id.hr_textview);
+        Settings.mainActivity = this;
+        IntentFilter filter = new IntentFilter("hu.obuda.university.mibanddatacolector.intent.action.HR");
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        hrBroadcastReciver = new HrBroadcastReciver();
+        registerReceiver(hrBroadcastReciver, filter);
+        this.imageView.setImageResource(R.mipmap.ic_off_round);
+        Button logoutbutton = (Button) findViewById(R.id.logout);
+        logoutbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                MainActivity.this.textView.setText("jelenleg nincs bejelentkezve");
+                MainActivity.this.imageView.setImageResource(R.mipmap.ic_off);
+               // Settings.mainActivity.textView.setText("jelenleg nincs bejelentkezve");
+            }
+        });
         // c.consume();
     }
 
@@ -170,9 +197,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart()
     {
         super.onStart();
+        FirebaseAuth  mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null){
+            Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
+            startService(services);
+            new Repeterwork(getApplicationContext());
+            //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
+            Settings.mainActivity.textView.setText("mukodik");
+        }
         Toast.makeText(getApplicationContext(),"Now onStart() calls", Toast.LENGTH_LONG).show(); //onStart Called
       //  this.c.produce();
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(hrBroadcastReciver);
+    }
 }

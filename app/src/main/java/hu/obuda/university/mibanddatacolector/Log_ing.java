@@ -119,7 +119,11 @@ public class Log_ing extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                     Intent services = new Intent(Log_ing.this,ForgeGroundService.class);
                                     startService(services);
-                                    //new Repeterwork();
+                                    new Repeterwork(getApplicationContext());
+                                    //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
+                                    Settings.mainActivity.textView.setText("mukodik");
+                                    Log_ing.this.finish();
+
                                 }
                             }
                         }

@@ -55,6 +55,7 @@ public class Signup extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         Toast.makeText(Signup.this, "sikeres failed.",
                                                 Toast.LENGTH_SHORT).show();
+                                        Signup.this.finish();
                                     }
                                 }
                             });
