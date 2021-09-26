@@ -18,9 +18,11 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
 
+import android.app.ActivityManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -197,12 +199,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart()
     {
         super.onStart();
+        Settings.mainActivity = this;
         FirebaseAuth  mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
-            startService(services);
-            new Repeterwork(getApplicationContext());
+            ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            int count = 0;
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if ("hu.obuda.university.mibanddatacolector.ForgeGroundService".equals(service.service.getClassName()) ==false ) {
+                   count = count+1;
+                   // return true;
+                System.out.println(service.service.getClassName());
+                }
+                else{
+                    //System.out.println("sfhudsivdpufeqhpfeiphh");
+                    break;
+                }
+            }
+            if (count == manager.getRunningServices(Integer.MAX_VALUE).size()){
+                Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
+                startService(services);
+                new Repeterwork(getApplicationContext());
+                //System.out.println("dhisdgvvjldsl");
+            }
+            //return false;
+           // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
+           // startService(services);
             //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
             Settings.mainActivity.textView.setText("mukodik");
         }

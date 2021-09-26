@@ -3,6 +3,7 @@ package hu.obuda.university.mibanddatacolector;
 import android.app.Service;
 import android.content.Context;
 import android.icu.util.Calendar;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 
@@ -36,7 +37,7 @@ public class Repeterwork {
             public void run() {
                 try{
                     Repeterwork.this.dataCollector.Testdatagenerator();
-                    File path = Repeterwork.this.context.getFilesDir();
+                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
                     File file = new File(path, "my-file-name.txt");
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                     Date date = new Date();

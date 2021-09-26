@@ -32,7 +32,7 @@ public class ForgeGroundService extends Service {
     private BroadcastReceiver mNetworkReceiver;
     private BroadcastReceiver mibanchek;
     private BroadcastReceiver bluthotchek;
-
+    private static ForgeGroundService service;
 
     public static String CHANNEL_ID = "adtgyujtoszolgaltatas";
     public static NotificationChannel CHANNEL = new NotificationChannel("proba","A neve", NotificationManager.IMPORTANCE_NONE);
