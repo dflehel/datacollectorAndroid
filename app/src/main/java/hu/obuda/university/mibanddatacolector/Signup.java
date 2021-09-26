@@ -3,7 +3,14 @@ package hu.obuda.university.mibanddatacolector;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityManager;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +31,8 @@ import java.util.Map;
 
 public class Signup extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    BluetoothDevice bluetoothDevice;
+    private BroadcastReceiver mNetworkReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,30 @@ public class Signup extends AppCompatActivity {
                                     if (task.isSuccessful()){
                                         Toast.makeText(Signup.this, "sikeres failed.",
                                                 Toast.LENGTH_SHORT).show();
+                                        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                                        int count = 0;
+                                        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                                            if ("hu.obuda.university.mibanddatacolector.ForgeGroundService".equals(service.service.getClassName()) ==false ) {
+                                                count = count+1;
+                                                // return true;
+                                                System.out.println(service.service.getClassName());
+                                            }
+                                            else{
+                                                //System.out.println("sfhudsivdpufeqhpfeiphh");
+                                                break;
+                                            }
+                                        }
+                                        if (count == manager.getRunningServices(Integer.MAX_VALUE).size()){
+                                            Intent services = new Intent(Signup.this,ForgeGroundService.class);
+                                            startService(services);
+                                            new Repeterwork(getApplicationContext());
+                                            //System.out.println("dhisdgvvjldsl");
+                                        }
+                                        //return false;
+                                        // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
+                                        // startService(services);
+                                        //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
+                                        Settings.mainActivity.textView.setText("mukodik");
                                         Signup.this.finish();
                                     }
                                 }
@@ -70,5 +103,14 @@ public class Signup extends AppCompatActivity {
             }
 
         });
+    }
+
+    private void registerNetworkBroadcastForNougat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
     }
 }

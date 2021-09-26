@@ -228,7 +228,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart()
     {
         super.onStart();
-
+        FirebaseAuth  mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null){
+            this.imageView.setImageResource(R.mipmap.ic_on_round);
+            this.textView.setText(" Mukodik ");
+        }
+        else{
+            this.imageView.setImageResource(R.mipmap.ic_off_round);
+            this.textView.setText("nincs bejelentkezve a felhasznalo");
+        }
         Toast.makeText(getApplicationContext(),"Now onStart() calls", Toast.LENGTH_LONG).show(); //onStart Called
       //  this.c.produce();
     }
