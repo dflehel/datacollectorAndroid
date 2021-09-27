@@ -16,7 +16,7 @@
 
     <EditText
         android:id="@+id/log_in_activity_email_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
@@ -38,7 +38,7 @@
 
     <EditText
         android:id="@+id/log_ing_activity_password_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
