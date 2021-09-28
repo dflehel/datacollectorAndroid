@@ -62,7 +62,7 @@ public class Signup extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentReference> task) {
                                     if (task.isSuccessful()){
-                                        Toast.makeText(Signup.this, "sikeres failed.",
+                                        Toast.makeText(Signup.this, "sikeres regisztralasz.",
                                                 Toast.LENGTH_SHORT).show();
                                         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                                         int count = 0;

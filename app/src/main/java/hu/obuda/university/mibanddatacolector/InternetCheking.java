@@ -77,7 +77,6 @@ public class InternetCheking extends BroadcastReceiver {
                 onlie = false;
                 Dataset.getInstance();
                 Dataset.datasave =1;
-                Dataset.saveDataset();
                 if (hu.obuda.university.mibanddatacolector.Settings.firststart) {
                      showNotificationdisconected(context,intent,CHANNEL1);
                     hu.obuda.university.mibanddatacolector.Settings.firststart = false;
