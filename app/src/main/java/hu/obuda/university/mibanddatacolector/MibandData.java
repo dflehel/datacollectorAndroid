@@ -15,6 +15,10 @@ public class MibandData {
     }
 
     public MibandData() {
+        timestamp = 0;
+        sensor = "";
+        value = "";
+        userid = "";
     }
 
     public long getTimestamp() {

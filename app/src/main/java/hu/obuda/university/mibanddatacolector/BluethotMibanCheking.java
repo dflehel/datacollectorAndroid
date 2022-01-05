@@ -11,8 +11,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 public class BluethotMibanCheking extends BroadcastReceiver {
 
@@ -31,6 +35,16 @@ public class BluethotMibanCheking extends BroadcastReceiver {
         } else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
             if (device.getName().contains("Mi Smart Band")) {
                 showNotificationconected(context, intent, CHANNEL1);
+//                hu.obuda.university.mibanddatacolector.Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_on);
+                Intent services = new Intent(context,ForgeGroundService.class);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+              //  hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
+              //  hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("Mi band csatlakozva");
+            //    hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás rendeltetésszerűen működik");
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.BLACK);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.GREEN);
+              //  context.startForegroundService(services);
             }
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
 
@@ -39,6 +53,12 @@ public class BluethotMibanCheking extends BroadcastReceiver {
         } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
             if (device.getName().contains("Mi Smart Band")) {
                 showNotificationdisconected(context, intent, CHANNEL2);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("Ninncsen Miband eszköz csatlakozva");
+
+                //   context.stopService(services);
             }
         }
 
@@ -53,8 +73,8 @@ public class BluethotMibanCheking extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setContentTitle("A miband eszkoz csatlakoztatva van")
-                .setContentText("Kerem hogy figyelje oda ne kapcsolodjon le a Miban eszkoz a telefonrol")
+        mBuilder.setContentTitle("A miband")
+                .setContentText(context.getText(R.string.sno))
                 .setAutoCancel(false)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentIntent(resultPendingIntent);
@@ -86,8 +106,8 @@ public class BluethotMibanCheking extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setContentTitle("A miband eszkoz csatlakozasa megszunk")
-                .setContentText("Kerem hogy csatlakoztassa vissza a Miban eszkozet")
+        mBuilder.setContentTitle("A miband")
+                .setContentText(context.getString(R.string.syes))
                 .setAutoCancel(false)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentIntent(resultPendingIntent);

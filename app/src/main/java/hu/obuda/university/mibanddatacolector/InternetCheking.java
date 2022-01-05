@@ -59,30 +59,26 @@ public class InternetCheking extends BroadcastReceiver {
             if (isOnline(context)) {
                 onlie = true;
                 if (Dataset.datasave ==0){
-                    Dataset.getInstance();
-                    Dataset.clreaData();
-                    showNotificationconected(context,intent,CHANNEL1);
+                  //  Dataset.getInstance();
+                   // Dataset.clreaData();
+                 //   showNotificationconected(context,intent,CHANNEL1);
                     hu.obuda.university.mibanddatacolector.Settings.firststart = false;
                     hu.obuda.university.mibanddatacolector.Settings.online = true;
                     return ;
                 }
                 else{
-                    Dataset.datasave = 0;
-                    Dataset.getInstance();
-                    Dataset.saveDataset();
-                    Dataset.clreaData();
+                 //   Dataset.datasave = 0;
+                 //   Dataset.getInstance();
+                 //   Dataset.saveDataset();
+                 //   Dataset.clreaData();
                   //  showNotificationreconected(context,intent,CHANNEL1);
+                    hu.obuda.university.mibanddatacolector.Settings.online = true;
                 }
             } else {
                 onlie = false;
-                Dataset.getInstance();
-                Dataset.datasave =1;
-                if (hu.obuda.university.mibanddatacolector.Settings.firststart) {
-                     showNotificationdisconected(context,intent,CHANNEL1);
-                    hu.obuda.university.mibanddatacolector.Settings.firststart = false;
-                    hu.obuda.university.mibanddatacolector.Settings.online = false;
-                    return;
-                }
+            //    Dataset.getInstance();
+             ///   Dataset.datasave =1;
+
             }
             //Thread.sleep(hu.obuda.university.mibanddatacolector.Settings.internetcheck*60*1000);
             //if (isOnline(context)&& !onlie){

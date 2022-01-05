@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">MibandDatacolector</string>
+    <string name="app_name">MibandDataCollector</string>
+    <string name="ujint">Újrakapcsolódás az internerte</string>
+    <string name="aktint">Internetkapcsolat aktív</string>
+    <string name="noint">Nincs internet kapcsolat</string>
+    <string name="bof">Bluetooth kikapcsolva</string>
+    <string name="bon">Bluetooth bekapcsolva</string>
+    <string name="sno">Szenzor leválasztva</string>
+    <string name="syes">Szenzor csatlakozva</string>
+    <string name="ruz">Rendszerüzenez</string>
+    <string name="login">Bejelentkezés</string>
+    <string name="signup">Regisztráció</string>
+    <string name="logout">Kijelentkezés</string>
+    <string name="appon">Az APP normál üzemben</string>
+    <string name="appoff">Az APP nem jól mûködik</string>
+    <string name="appback">appbackgroundworkstatus</string>
+    <string name="email">Email</string>
+    <string name="pass">Jelszó</string>
+    <string name="passc">Jelszó visszaigazolása</string>
 </resources>

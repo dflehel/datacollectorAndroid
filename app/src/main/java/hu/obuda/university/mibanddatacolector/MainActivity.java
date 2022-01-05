@@ -15,6 +15,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,10 +38,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.dkharrat.nexusdata.core.ObjectContext;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
@@ -48,7 +54,13 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     public ImageView imageView;
     public TextView textView;
+    public TextView textViewbat;
+    public  TextView textViewagghr;
+    public  TextView textViewact;
+    public  TextView textViewstatus;
+    public  TextView textViewmibanddevice;
     private HrBroadcastReciver hrBroadcastReciver;
+    DatabaseHelper databaseHelper;
 
     public class Kafka {
         private final String topic;
@@ -118,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // this.databaseHelper = new DatabaseHelper(this);
         setContentView(R.layout.activity_main);
         FirebaseMessaging.getInstance().subscribeToTopic("rendszeruzenet")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -131,12 +144,15 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
         // DBSession session = new AndroidDBSession(getApplicationContext());
         this.c = new Kafka("glider-01.srvs.cloudkafka.com:9094,glider-02.srvs.cloudkafka.com:9094,glider-03.srvs.cloudkafka.com:9094", "yxgb6gct", "1Oz1lEzdDFJpLN_OOUWhhrY4NC_CQakl");
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
                 .setMinimumFetchIntervalInSeconds(10*3600)
                 .build();
+        Settings.context = getApplicationContext();
         mFirebaseRemoteConfig.setConfigSettingsAsync(configSettings);
         mFirebaseRemoteConfig.setDefaultsAsync(R.xml.remote_config_defaults);
         mFirebaseRemoteConfig.fetchAndActivate().addOnCompleteListener(this, new OnCompleteListener<Boolean>() {
@@ -151,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                    // System.out.println(mFirebaseRemoteConfig.getDouble("timeforwaittoreques"));
                     Settings.internetcheck = new Double(mFirebaseRemoteConfig.getDouble("munitesforinternetcheck")).intValue();
                     Settings.bluethotconnection = new Double(mFirebaseRemoteConfig.getDouble("timeforwaittoreques")).intValue();
+                    Settings.savetimeperiod = new Double(mFirebaseRemoteConfig.getDouble("hoursofsave")).intValue();
                 } else {
                     Toast.makeText(MainActivity.this, "Fetch failed",
                             Toast.LENGTH_SHORT).show();
@@ -174,21 +191,29 @@ public class MainActivity extends AppCompatActivity {
 
         });
         Dataset.getInstance();
-        this.imageView = (ImageView) findViewById(R.id.imageView_on_off);
+       // this.imageView = (ImageView) findViewById(R.id.imageView_on_off);
+        this.textViewstatus = (TextView) findViewById(R.id.status_label);
+        this.textViewmibanddevice = (TextView) findViewById(R.id.miband_device_label);
         this.textView = (TextView) findViewById(R.id.hr_textview);
+        this.textViewact = (TextView) findViewById(R.id.activity_label);
+        this.textViewagghr = (TextView) findViewById(R.id.agg_hr_label);
+        this.textViewbat = (TextView) findViewById(R.id.battery_label);
         Settings.mainActivity = this;
-        IntentFilter filter = new IntentFilter("hu.obuda.university.mibanddatacolector.intent.action.HR");
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        hrBroadcastReciver = new HrBroadcastReciver();
-        registerReceiver(hrBroadcastReciver, filter);
-        this.imageView.setImageResource(R.mipmap.ic_off_round);
+       // IntentFilter filter = new IntentFilter("hu.obuda.university.mibanddatacolector.intent.action.HR");
+       // filter.addCategory(Intent.CATEGORY_DEFAULT);
+      // hrBroadcastReciver = new HrBroadcastReciver();
+       // registerReceiver(hrBroadcastReciver, filter);
+//        this.imageView.setImageResource(R.mipmap.ic_off_round);
         Button logoutbutton = (Button) findViewById(R.id.logout);
         logoutbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
                 MainActivity.this.textView.setText("jelenleg nincs bejelentkezve");
-                MainActivity.this.imageView.setImageResource(R.mipmap.ic_off);
+             //   MainActivity.this.imageView.setImageResource(R.mipmap.ic_off);
+                MainActivity.this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+                MainActivity.this.textViewstatus.setTextColor(Color.WHITE);
+                MainActivity.this.textViewstatus.setBackgroundColor(Color.RED);
                // Settings.mainActivity.textView.setText("jelenleg nincs bejelentkezve");
             }
         });
@@ -196,32 +221,52 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth  mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-            int count = 0;
-            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if ("hu.obuda.university.mibanddatacolector.ForgeGroundService".equals(service.service.getClassName()) ==false ) {
-                    count = count+1;
-                    // return true;
-                    System.out.println(service.service.getClassName());
-                }
-                else{
-                    //System.out.println("sfhudsivdpufeqhpfeiphh");
-                    break;
-                }
+            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            if (mBluetoothAdapter.enable() == false){
+                this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük kapcsolja be a bluetooth-t");
+                this.textViewstatus.setTextColor(Color.WHITE);
+                this.textViewstatus.setBackgroundColor(Color.RED);
+
             }
-            if (count == manager.getRunningServices(Integer.MAX_VALUE).size()){
-                Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
-                startService(services);
-                new Repeterwork(getApplicationContext());
-                //System.out.println("dhisdgvvjldsl");
+            else {
+                ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+                int count = 0;
+                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if ("hu.obuda.university.mibanddatacolector.ForgeGroundService".equals(service.service.getClassName()) == false) {
+                        count = count + 1;
+                        // return true;
+                        System.out.println(service.service.getClassName());
+                    } else {
+                        //System.out.println("sfhudsivdpufeqhpfeiphh");
+                        break;
+                    }
+                }
+                if (count == manager.getRunningServices(Integer.MAX_VALUE).size()) {
+                    Intent services = new Intent(MainActivity.this, ForgeGroundService.class);
+                    startForegroundService(services);
+                    //new Repeterwork(getApplicationContext());
+                    //System.out.println("dhisdgvvjldsl");
+                }
+                //return false;
+                // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
+                // startService(services);
+                //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
+                Settings.mainActivity.textView.setText("mukodik");
+                this.textViewstatus.setText("Az alkalmazás rendeltetésszerűen működik");
+                this.textViewstatus.setTextColor(Color.BLACK);
+                this.textViewstatus.setBackgroundColor(Color.GREEN);
             }
-            //return false;
-            // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
-            // startService(services);
-            //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
-            Settings.mainActivity.textView.setText("mukodik");
+        }
+        else {
+            this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+            this.textViewstatus.setTextColor(Color.WHITE);
+            this.textViewstatus.setBackgroundColor(Color.RED);
         }
         // c.consume();
+
+     //   Integer toroldadatok = databaseHelper.deletelAll();
+     //   System.out.println("trolt adatok= "+toroldadatok.toString());
+
     }
 
     @Override
@@ -231,20 +276,26 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth  mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            this.imageView.setImageResource(R.mipmap.ic_on_round);
-            this.textView.setText(" Mukodik ");
+//            this.imageView.setImageResource(R.mipmap.ic_on_round);
+           // this.textView.setText(" Mukodik ");
         }
         else{
-            this.imageView.setImageResource(R.mipmap.ic_off_round);
-            this.textView.setText("nincs bejelentkezve a felhasznalo");
+     //       this.imageView.setImageResource(R.mipmap.ic_off_round);
+          //  this.textView.setText("nincs bejelentkezve a felhasznalo");
         }
-        Toast.makeText(getApplicationContext(),"Now onStart() calls", Toast.LENGTH_LONG).show(); //onStart Called
+        if (Settings.online) {
+            this.textViewmibanddevice.setText("Mi band  csatlakozva");
+        }
+        else{
+            this.textViewmibanddevice.setText("Mi band nincs csatlakozva");
+        }
+       // Toast.makeText(getApplicationContext(),"Now onStart() calls", Toast.LENGTH_LONG).show(); //onStart Called
       //  this.c.produce();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(hrBroadcastReciver);
+     //   unregisterReceiver(hrBroadcastReciver);
     }
 }

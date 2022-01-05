@@ -33,10 +33,16 @@ public class BlueThoothIsOn extends BroadcastReceiver {
             state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
             if (state == BluetoothAdapter.STATE_OFF){
                 showNotificationdisconected(context,intent,CHANNEL1);
+             //   hu.obuda.university.mibanddatacolector.Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_off_round);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("Ninncsen a Bluetooth bekapcsolva");
 
             }
             if( state ==BluetoothAdapter.STATE_ON){
                 showNotificationdisconected(context,intent,CHANNEL2);
+             //   hu.obuda.university.mibanddatacolector.Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_on_round);
 
             }
         }
@@ -51,8 +57,8 @@ public class BlueThoothIsOn extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setContentTitle("A Nluethotthja ki van kapcsolva")
-                .setContentText("Kerem hogy kapcsolja be a Bluethot az eszkozen")
+        mBuilder.setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.bof))
                 .setAutoCancel(false)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentIntent(resultPendingIntent);
@@ -85,8 +91,8 @@ public class BlueThoothIsOn extends BroadcastReceiver {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        mBuilder.setContentTitle("A Bluethoth be van kapcsolva a telefonjan")
-                .setContentText("Kerem hogy ne kapcsolja ki a Bluethoothoot a telefonjarol")
+        mBuilder.setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.bon))
                 .setAutoCancel(false)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentIntent(resultPendingIntent);

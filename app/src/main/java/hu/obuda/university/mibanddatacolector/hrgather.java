@@ -10,20 +10,27 @@ import java.util.concurrent.TimeUnit;
 public class hrgather {
 
     private DataCollector dataCollector;
+    public static boolean working = false;
 
     public hrgather() {
 
 
 
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        Executors.newScheduledThreadPool(5);
+        ScheduledExecutorService executor =  Executors.newScheduledThreadPool(1);
+        //Executors.newScheduledThreadPool(0);
         this.dataCollector = new DataCollector();
 
         Runnable periodicTask = new Runnable(){
             @Override
             public void run() {
                 try{
-                    Settings.dataCollector.getaverage();
+                   // System.out.println("herelindultam");
+                    if (hrgather.working ==false) {
+                        hrgather.working = true;
+                        Settings.dataCollector.getaverage();
+                     //   System.out.println("vegeztemhr");
+                        hrgather.working = false;
+                    }
                 }catch(Exception e){
 
                 }

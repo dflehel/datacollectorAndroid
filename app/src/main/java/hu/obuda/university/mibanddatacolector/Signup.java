@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -62,7 +63,7 @@ public class Signup extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentReference> task) {
                                     if (task.isSuccessful()){
-                                        Toast.makeText(Signup.this, "sikeres regisztralasz.",
+                                        Toast.makeText(Signup.this, "sikeres regisztrálás.",
                                                 Toast.LENGTH_SHORT).show();
                                         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
                                         int count = 0;
@@ -80,14 +81,17 @@ public class Signup extends AppCompatActivity {
                                         if (count == manager.getRunningServices(Integer.MAX_VALUE).size()){
                                             Intent services = new Intent(Signup.this,ForgeGroundService.class);
                                             startService(services);
-                                            new Repeterwork(getApplicationContext());
+                                          //  new Repeterwork(getApplicationContext());
                                             //System.out.println("dhisdgvvjldsl");
                                         }
                                         //return false;
                                         // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
                                         // startService(services);
                                         //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
-                                        Settings.mainActivity.textView.setText("mukodik");
+                                       // Settings.mainActivity.textView.setText("mukodik");
+                                        Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+                                        Settings.mainActivity.textViewstatus.setTextColor(Color.BLACK);
+                                        Settings.mainActivity.textViewstatus.setBackgroundColor(Color.GREEN);
                                         Signup.this.finish();
                                     }
                                 }

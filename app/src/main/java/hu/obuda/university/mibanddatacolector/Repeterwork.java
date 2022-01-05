@@ -23,38 +23,44 @@ public class Repeterwork {
 
     private DataCollector dataCollector;
     private Context context;
+    private DatabaseSaver databaseSaver;
+    public static boolean work = false;
 
     public Repeterwork(Context context) {
         this.context =context;
 
 
-        ScheduledExecutorService executor =Executors.newScheduledThreadPool(1);
-        Executors.newScheduledThreadPool(5);
+        ScheduledExecutorService executor =  Executors.newScheduledThreadPool(1);
+       // Executors.newScheduledThreadPool(0);
         this.dataCollector = new DataCollector();
-
+        this.databaseSaver = new DatabaseSaver(context);
         Runnable periodicTask = new Runnable(){
             @Override
             public void run() {
                 try{
-                    Repeterwork.this.dataCollector.Testdatagenerator();
-                    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                    File file = new File(path, "my-file-name.txt");
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                    Date date = new Date();
-                    System.out.println(formatter.format(date));
-                    System.out.println(path);
-                    FileOutputStream stream = new FileOutputStream(file,true);
-                    try {
-                        stream.write(formatter.format(date).getBytes());
-                    } finally {
-                        stream.close();
+                  //  System.out.println("adatfeltolto");
+                    if (Repeterwork.work ==false){
+                    Repeterwork.work = true;
+                    //Repeterwork.this.dataCollector.Testdatagenerator();
+                //    File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                ///    File file = new File(path, "my-file-name.txt");
+                 //   SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                 //   Date date = new Date();
+                   // System.out.println(formatter.format(date));
+                  //  System.out.println(path);
+                  //  System.out.println("megyeket");
+                    databaseSaver.dataSave();
+                  //  System.out.println("elvegeztem");
+                    Repeterwork.work = false;}
+                    else{
+
                     }
                 }catch(Exception e){
-
+                    System.out.println(e.toString());
                 }
             }
         };
-        ScheduledFuture<?> periodicFuture = executor.scheduleAtFixedRate(periodicTask, 10, 10, TimeUnit.MINUTES);
+        ScheduledFuture<?> periodicFuture = executor.scheduleAtFixedRate(periodicTask, Settings.savetimeperiod, Settings.savetimeperiod, TimeUnit.HOURS);
     }
 }
 

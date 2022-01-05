@@ -33,9 +33,11 @@ public class ForgeGroundService extends Service {
     private BroadcastReceiver mibanchek;
     private BroadcastReceiver bluthotchek;
     private static ForgeGroundService service;
+    private hrgather hrgather;
 
     public static String CHANNEL_ID = "adtgyujtoszolgaltatas";
     public static NotificationChannel CHANNEL = new NotificationChannel("proba","A neve", NotificationManager.IMPORTANCE_NONE);
+    private HrBroadcastReciver hrBroadcastReciver;
 
     @Override
     public void onCreate(){
@@ -45,8 +47,17 @@ public class ForgeGroundService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        Settings.miband = null;
         Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_off_round);
+       try{ unregisterReceiver(mibanchek);
+        unregisterReceiver(mNetworkReceiver);
+        unregisterReceiver(bluthotchek);
+        unregisterReceiver(hrBroadcastReciver);}
+       catch (Exception e){
+
+       }
     }
+
 
     @Override
     public int onStartCommand(Intent intent,int flags,int stratId){
@@ -69,13 +80,13 @@ public class ForgeGroundService extends Service {
 
             //MIBAND_DEBUG.put(UUID.fromString("00002a39-0000-1000-8000-00805f9b34fb"), "Heart Rate Control Point");
             //MIBAND_DEBUG.put(UUID.fromString("00002a37-0000-1000-8000-00805f9b34fb"), "Heart Rate Measurement");
-            MiBandDevice miband = null;
+            Settings.miband = null;
             try {
-                miband = new MiBandDevice(this, device);
-                MiBandDevice finalMiband = miband;
+                Settings.miband = new MiBandDevice(this, device);
+                MiBandDevice finalMiband = Settings.miband;
                 System.out.println("mibandmegvan");
 
-                miband.setNotify(new DataCollector(getApplicationContext()) {
+                Settings.miband.setNotify(new DataCollector(getApplicationContext()) {
 
                     @Override
                     public void onCommSuccess(Object data) {
@@ -88,13 +99,16 @@ public class ForgeGroundService extends Service {
                         UserInfo userInfo = new UserInfo(big.intValue(), 1, 32, 180, 55, "胖梁", 0);
                         finalMiband.fakeUserInfo = userInfo;
                         finalMiband.startHeartRateScan();
-
+                        Settings.mainActivity.textViewbat.setText(finalMiband.GetBatteryLevel()+"%");
+                        System.out.println(finalMiband.GetBatteryLevel());
+                        Settings.mibandonline = true;
                     }
                 });
-                Settings.dataCollector = (DataCollector) miband.getNotify();
+                Settings.dataCollector = (DataCollector) Settings.miband.getNotify();
             } catch (Exception e) {
                 e.printStackTrace();
             }}
+        Settings.mainActivity.textViewmibanddevice.setText("Mi band csatlakozva");
         CHANNEL.setLightColor(Color.BLUE);
         CHANNEL.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
         NotificationManager service = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -105,8 +119,8 @@ public class ForgeGroundService extends Service {
 
         Notification notification =
                 new Notification.Builder(this, "proba")
-                        .setContentTitle("megy ugye")
-                        .setContentText("fut az alkalmazas")
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(getString(R.string.appback))
                         .setSmallIcon(R.drawable.ic_android_black_24dp)
                         .setContentIntent(pendingIntent)
                         .setTicker("proba")
@@ -114,13 +128,35 @@ public class ForgeGroundService extends Service {
 
         startForeground(101,notification);
         mNetworkReceiver = new InternetCheking();
-        registerNetworkBroadcastForNougat();
+       if ( mNetworkReceiver.isOrderedBroadcast()==false) {
+           registerNetworkBroadcastForNougat();
+       }
         mibanchek = new BluethotMibanCheking();
-        registerMibandCheckReciver();
+       if (mibanchek.isOrderedBroadcast() ==false) {
+           registerMibandCheckReciver();
+       }
         bluthotchek = new BlueThoothIsOn();
-        registerBluethootCheckReciver();
-        new hrgather();
-        Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_on_round);
+       if (bluthotchek.isOrderedBroadcast()==false) {
+           registerBluethootCheckReciver();
+       }
+        hrgather =  new hrgather();
+//        Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_on_round);
+        new Repeterwork(getApplicationContext());
+         IntentFilter filter = new IntentFilter("hu.obuda.university.mibanddatacolector.intent.action.HR");
+         filter.addCategory(Intent.CATEGORY_DEFAULT);
+        IntentFilter filter1 = new IntentFilter("hu.obuda.university.mibanddatacolector.intent.action.HR_AGG");
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        IntentFilter filter2 = new IntentFilter("hu.obuda.university.mibanddatacolector.intent.action.ACT");
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        IntentFilter filter3 = new IntentFilter("hu.obuda.university.mibanddatacolector.intent.action.BATTERY");
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+         hrBroadcastReciver = new HrBroadcastReciver();
+         if (hrBroadcastReciver.isOrderedBroadcast() ==false) {
+             registerReceiver(hrBroadcastReciver, filter);
+             registerReceiver(hrBroadcastReciver, filter1);
+             registerReceiver(hrBroadcastReciver, filter2);
+             registerReceiver(hrBroadcastReciver, filter3);
+         }
         return START_REDELIVER_INTENT;
     }
     private void registerNetworkBroadcastForNougat() {

@@ -42,6 +42,7 @@ public class MiBandDevice extends BluetoothGattCallback {
         this.notify = notify;
     }
 
+
     public int GetSteps(){
         byte[] raw = services.miBandService.activityChar.getValue();
         byte[] bytes = Arrays.copyOfRange(raw,1,5);
@@ -171,10 +172,12 @@ public class MiBandDevice extends BluetoothGattCallback {
         super.onCharacteristicChanged(gatt, characteristic);
         if (characteristic.getUuid().toString().equalsIgnoreCase(services.heartRateService.measurementNotifyChar.getUuid().toString())){
             // HR data received
+          //  System.out.println("mibanddevice heartratre");
             notify.OnHeartRateReceived(services.heartRateService.measurementNotifyChar.getValue()[1]);
         }
         else if (characteristic.getUuid().toString().equalsIgnoreCase(services.miBandService.activityChar.getUuid().toString())){
             // Step data received
+          //  System.out.println("step data jott");
             notify.OnMovingActivity(GetSteps(), GetCalories(), GetDistance());
         }
         else if (characteristic.getUuid().toString().equalsIgnoreCase(services.miBandService.statusNotifyChar.getUuid().toString())){

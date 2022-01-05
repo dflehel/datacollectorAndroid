@@ -8,4 +8,8 @@
         <key>munitesforinternetcheck</key>
         <value>5</value>
     </entry>
+    <entry>
+        <key>hoursofsave</key>
+        <value>6</value>
+    </entry>
 </defaultsMap>

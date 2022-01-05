@@ -14,6 +14,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -115,13 +116,16 @@ public class Log_ing extends AppCompatActivity {
                                     // Sign in success, update UI with the signed-in user's information
                                     //  Log.d(TAG, "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(Log_ing.this, "sikeresbe",
+                                    Toast.makeText(Log_ing.this, "sikeres bejelentkezés",
                                             Toast.LENGTH_SHORT).show();
                                     Intent services = new Intent(Log_ing.this,ForgeGroundService.class);
                                     startService(services);
-                                    new Repeterwork(getApplicationContext());
+                                    //new Repeterwork(getApplicationContext());
                                     //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
-                                    Settings.mainActivity.textView.setText("mukodik");
+                                   // Settings.mainActivity.textView.setText("mukodik");
+                                    Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+                                    Settings.mainActivity.textViewstatus.setTextColor(Color.BLACK);
+                                    Settings.mainActivity.textViewstatus.setBackgroundColor(Color.GREEN);
                                     Log_ing.this.finish();
 
                                 }

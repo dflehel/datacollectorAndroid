@@ -51,6 +51,12 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-config'
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.github.dkharrat.nexusdata:nexusdata:0.2.1'
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-database:16.0.5'
+    implementation 'com.google.firebase:firebase-storage:16.0.5'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
 
 

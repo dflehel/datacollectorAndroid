@@ -53,6 +53,9 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="hu.obuda.university.mibanddatacolector.intent.action.HR" />
+                <action android:name="hu.obuda.university.mibanddatacolector.intent.action.HR_AGG" />
+                <action android:name="hu.obuda.university.mibanddatacolector.intent.action.ACT" />
+                <action android:name="hu.obuda.university.mibanddatacolector.intent.action.BATTERY" />
             </intent-filter>
 
         </receiver>
