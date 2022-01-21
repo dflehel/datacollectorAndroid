@@ -6,13 +6,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.util.List;
 
 public class BlueThoothIsOn extends BroadcastReceiver {
     public static String CHANNEL_ID = "internetszolgaltatas";
@@ -33,15 +40,18 @@ public class BlueThoothIsOn extends BroadcastReceiver {
             state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
             if (state == BluetoothAdapter.STATE_OFF){
                 showNotificationdisconected(context,intent,CHANNEL1);
+                hu.obuda.university.mibanddatacolector.Settings.bluethott = false;
              //   hu.obuda.university.mibanddatacolector.Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_off_round);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("Ninncsen a Bluetooth bekapcsolva");
-
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.statuschange();
             }
             if( state ==BluetoothAdapter.STATE_ON){
-                showNotificationdisconected(context,intent,CHANNEL2);
+            //    showNotificationdisconected(context,intent,CHANNEL2);
+                hu.obuda.university.mibanddatacolector.Settings.bluethott=true;
+
              //   hu.obuda.university.mibanddatacolector.Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_on_round);
 
             }

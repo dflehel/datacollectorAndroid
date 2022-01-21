@@ -3,9 +3,9 @@
     <string name="ujint">Újrakapcsolódás az internerte</string>
     <string name="aktint">Internetkapcsolat aktív</string>
     <string name="noint">Nincs internet kapcsolat</string>
-    <string name="bof">Bluetooth kikapcsolva</string>
+    <string name="bof">Kérem kapcsolja vissza a bluetooth kapcsolatot a telefonján</string>
     <string name="bon">Bluetooth bekapcsolva</string>
-    <string name="sno">Szenzor leválasztva</string>
+    <string name="sno">A Miband eszköz lecsatlakozott. kérem kapcsolja vissza az eszközt, vagy térjen vissza a telefon hatótávjába</string>
     <string name="syes">Szenzor csatlakozva</string>
     <string name="ruz">Rendszerüzenez</string>
     <string name="login">Bejelentkezés</string>

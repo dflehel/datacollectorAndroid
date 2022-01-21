@@ -20,9 +20,11 @@ import java.util.List;
 public class MiBandDevice extends BluetoothGattCallback {
     private final MiBandServices services;
     private MiBandNotificationInterface notify;
+    public BluetoothGatt gat;
     UserInfo fakeUserInfo;
     public MiBandDevice(BluetoothGatt gatt, MiBandNotificationInterface notificationImplementation) throws Exception {
         services = new MiBandServices(gatt);
+        this.gat = gatt;
         notify = notificationImplementation;
         if(!(services.genericAccessService.deviceNameChar.getStringValue(0).equalsIgnoreCase("Mi Smart Band 5"))||(services.authenticationService.customAuthChar.getValue()[0] != 3))
         {
@@ -33,7 +35,9 @@ public class MiBandDevice extends BluetoothGattCallback {
     }
 
     public MiBandDevice(Context context, BluetoothDevice device) throws Exception {
-         services = new MiBandServices(device.connectGatt(context,true,this));
+        //gat = device.connectGatt(context,false,this);
+         services = new MiBandServices(device.connectGatt(context,false,this));
+        //services = new MiBandServices(gat);
          byte[] name = services.genericAccessService.deviceNameChar.getValue();
          EnableNotifications();
     }

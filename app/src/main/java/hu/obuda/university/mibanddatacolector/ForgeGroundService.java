@@ -27,6 +27,7 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
 import java.util.List;
+import java.util.Set;
 
 public class ForgeGroundService extends Service {
     private BroadcastReceiver mNetworkReceiver;
@@ -85,12 +86,15 @@ public class ForgeGroundService extends Service {
                 Settings.miband = new MiBandDevice(this, device);
                 MiBandDevice finalMiband = Settings.miband;
                 System.out.println("mibandmegvan");
-
+                Settings.mibandonline = true;
+                Settings.mibandd = true;
+                Settings.mainActivity.statuschange();
                 Settings.miband.setNotify(new DataCollector(getApplicationContext()) {
 
                     @Override
                     public void onCommSuccess(Object data) {
                         Log.d("login", "connect success");
+
                         long hi = device.getUuids()[0].getUuid().getMostSignificantBits();
                         long lo = device.getUuids()[0].getUuid().getLeastSignificantBits();
                         byte[] bytes = ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
@@ -101,7 +105,7 @@ public class ForgeGroundService extends Service {
                         finalMiband.startHeartRateScan();
                         Settings.mainActivity.textViewbat.setText(finalMiband.GetBatteryLevel()+"%");
                         System.out.println(finalMiband.GetBatteryLevel());
-                        Settings.mibandonline = true;
+
                     }
                 });
                 Settings.dataCollector = (DataCollector) Settings.miband.getNotify();
@@ -157,6 +161,7 @@ public class ForgeGroundService extends Service {
              registerReceiver(hrBroadcastReciver, filter2);
              registerReceiver(hrBroadcastReciver, filter3);
          }
+         Settings.mainActivity.statuschange();
         return START_REDELIVER_INTENT;
     }
     private void registerNetworkBroadcastForNougat() {

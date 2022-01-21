@@ -14,6 +14,9 @@ public class Settings {
     public static DataCollector dataCollector;
     public static MiBandDevice miband;
     public static Context context;
+    public static boolean user;
+    public static boolean mibandd;
+    public static boolean bluethott;
 
 
 }

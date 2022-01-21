@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private HrBroadcastReciver hrBroadcastReciver;
     DatabaseHelper databaseHelper;
 
+
     public class Kafka {
         private final String topic;
         private final HashMap<String, Object> props;
@@ -209,7 +210,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                MainActivity.this.textView.setText("jelenleg nincs bejelentkezve");
+                Settings.user = false;
+               // MainActivity.this.textView.setText("jelenleg nincs bejelentkezve");
              //   MainActivity.this.imageView.setImageResource(R.mipmap.ic_off);
                 MainActivity.this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
                 MainActivity.this.textViewstatus.setTextColor(Color.WHITE);
@@ -221,8 +223,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth  mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
+            Settings.user = true;
             BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (mBluetoothAdapter.enable() == false){
+                Settings.bluethott = false;
                 this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük kapcsolja be a bluetooth-t");
                 this.textViewstatus.setTextColor(Color.WHITE);
                 this.textViewstatus.setBackgroundColor(Color.RED);
@@ -251,13 +255,15 @@ public class MainActivity extends AppCompatActivity {
                 // Intent services = new Intent(MainActivity.this,ForgeGroundService.class);
                 // startService(services);
                 //Settings.mainActivity.imageView.setImageDrawable(R.drawable.on);
-                Settings.mainActivity.textView.setText("mukodik");
+               // Settings.mainActivity.textView.setText("mukodik");
+                Settings.bluethott = true;
                 this.textViewstatus.setText("Az alkalmazás rendeltetésszerűen működik");
                 this.textViewstatus.setTextColor(Color.BLACK);
                 this.textViewstatus.setBackgroundColor(Color.GREEN);
             }
         }
         else {
+            Settings.user = false;
             this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
             this.textViewstatus.setTextColor(Color.WHITE);
             this.textViewstatus.setBackgroundColor(Color.RED);
@@ -269,6 +275,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void statuschange(){
+        if (Settings.user == false){
+            this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+            this.textViewstatus.setTextColor(Color.WHITE);
+            this.textViewstatus.setBackgroundColor(Color.RED);
+            this.textViewmibanddevice.setText("Mi band nincs csatlakozva");
+            return;
+        }
+        if(Settings.bluethott==false){
+            this.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük kapcsolja be a bluetooth-t");
+            this.textViewstatus.setTextColor(Color.WHITE);
+            this.textViewstatus.setBackgroundColor(Color.RED);
+            this.textViewmibanddevice.setText("Mi band nincs csatlakozva");
+            return;
+        }
+        if (Settings.mibandd==false){
+           this.textViewmibanddevice.setText("Mi band nincs csatlakozva");
+            this.textViewstatus.setText(" Az alkalmazás nem működik: kérjük csatlakoztassa a Miband szenzort, vagy ellenőrizze a Mifit alkalmazás működését");
+            this.textViewstatus.setTextColor(Color.WHITE);
+            this.textViewstatus.setBackgroundColor(Color.RED);
+            return;
+        }
+        this.textViewmibanddevice.setText("Mi band csatlakozva");
+        this.textViewstatus.setText("Az alkalmazás rendeltetésszerűen működik");
+        this.textViewstatus.setTextColor(Color.BLACK);
+        this.textViewstatus.setBackgroundColor(Color.GREEN);
+        return;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        this.statuschange();
+    }
+
     @Override
     protected void onStart()
     {
@@ -276,19 +317,24 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth  mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
+            Settings.user = true;
 //            this.imageView.setImageResource(R.mipmap.ic_on_round);
            // this.textView.setText(" Mukodik ");
         }
         else{
+            Settings.user = false;
      //       this.imageView.setImageResource(R.mipmap.ic_off_round);
           //  this.textView.setText("nincs bejelentkezve a felhasznalo");
         }
         if (Settings.online) {
-            this.textViewmibanddevice.setText("Mi band  csatlakozva");
+            this.textViewmibanddevice.setText("Mi band csatlakozva");
+            Settings.mibandd = true;
         }
         else{
             this.textViewmibanddevice.setText("Mi band nincs csatlakozva");
+            Settings.mibandd = false;
         }
+        this.statuschange();
        // Toast.makeText(getApplicationContext(),"Now onStart() calls", Toast.LENGTH_LONG).show(); //onStart Called
       //  this.c.produce();
     }

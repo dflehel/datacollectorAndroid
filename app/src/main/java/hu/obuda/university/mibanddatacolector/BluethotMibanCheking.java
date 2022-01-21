@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import androidx.core.app.NotificationCompat;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 public class BluethotMibanCheking extends BroadcastReceiver {
 
@@ -34,16 +37,50 @@ public class BluethotMibanCheking extends BroadcastReceiver {
 
         } else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
             if (device.getName().contains("Mi Smart Band")) {
-                showNotificationconected(context, intent, CHANNEL1);
+            //    showNotificationconected(context, intent, CHANNEL1);
+                hu.obuda.university.mibanddatacolector.Settings.mibandd = true;
 //                hu.obuda.university.mibanddatacolector.Settings.mainActivity.imageView.setImageResource(R.mipmap.ic_on);
                 Intent services = new Intent(context,ForgeGroundService.class);
-                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
+           //     hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
               //  hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
               //  hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("Mi band csatlakozva");
-            //    hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás rendeltetésszerűen működik");
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás rendeltetésszerűen működik");
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.BLACK);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.GREEN);
+                BluetoothDevice bluetoothDevice = device;
+                    hu.obuda.university.mibanddatacolector.Settings.miband = null;
+                    try {
+                        hu.obuda.university.mibanddatacolector.Settings.miband = new MiBandDevice(hu.obuda.university.mibanddatacolector.Settings.context, device);
+                        MiBandDevice finalMiband = hu.obuda.university.mibanddatacolector.Settings.miband;
+                        System.out.println("mibandmegvan");
+                        hu.obuda.university.mibanddatacolector.Settings.mibandonline = true;
+                        hu.obuda.university.mibanddatacolector.Settings.mibandd = true;
+                        hu.obuda.university.mibanddatacolector.Settings.mainActivity.statuschange();
+                        hu.obuda.university.mibanddatacolector.Settings.miband.setNotify(new DataCollector(hu.obuda.university.mibanddatacolector.Settings.context) {
+
+                            @Override
+                            public void onCommSuccess(Object data) {
+                                Log.d("login", "connect success");
+
+                                long hi = device.getUuids()[0].getUuid().getMostSignificantBits();
+                                long lo = device.getUuids()[0].getUuid().getLeastSignificantBits();
+                                byte[] bytes = ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
+                                BigInteger big = new BigInteger(bytes);
+                                String numericUuid = big.toString().replace('-', '1'); // just in case
+                                UserInfo userInfo = new UserInfo(big.intValue(), 1, 32, 180, 55, "胖梁", 0);
+                                finalMiband.fakeUserInfo = userInfo;
+                                finalMiband.startHeartRateScan();
+                                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewbat.setText(finalMiband.GetBatteryLevel()+"%");
+                                System.out.println(finalMiband.GetBatteryLevel());
+
+                            }
+                        });
+                        hu.obuda.university.mibanddatacolector.Settings.dataCollector = (DataCollector) hu.obuda.university.mibanddatacolector.Settings.miband.getNotify();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
               //  context.startForegroundService(services);
             }
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -53,6 +90,8 @@ public class BluethotMibanCheking extends BroadcastReceiver {
         } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
             if (device.getName().contains("Mi Smart Band")) {
                 showNotificationdisconected(context, intent, CHANNEL2);
+                hu.obuda.university.mibanddatacolector.Settings.mibandd = false;
+
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
