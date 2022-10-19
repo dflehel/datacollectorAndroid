@@ -68,7 +68,7 @@ public class BluethotMibanCheking extends BroadcastReceiver {
                                 byte[] bytes = ByteBuffer.allocate(16).putLong(hi).putLong(lo).array();
                                 BigInteger big = new BigInteger(bytes);
                                 String numericUuid = big.toString().replace('-', '1'); // just in case
-                                UserInfo userInfo = new UserInfo(big.intValue(), 1, 32, 180, 55, "胖梁", 0);
+                                UserInfo userInfo = new UserInfo(big.intValue(), 1, 32, 180, 55, "Kover Gerenda", 0);
                                 finalMiband.fakeUserInfo = userInfo;
                                 finalMiband.startHeartRateScan();
                                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewbat.setText(finalMiband.GetBatteryLevel()+"%");
