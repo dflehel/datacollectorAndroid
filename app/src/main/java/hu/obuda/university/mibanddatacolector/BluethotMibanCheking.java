@@ -45,7 +45,6 @@ public class BluethotMibanCheking extends BroadcastReceiver {
               //  hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
               //  hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("Mi band csatlakozva");
-                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás rendeltetésszerűen működik");
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.BLACK);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.GREEN);
                 BluetoothDevice bluetoothDevice = device;
@@ -80,7 +79,7 @@ public class BluethotMibanCheking extends BroadcastReceiver {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az eszköz rendeltetésszerűen működik");
               //  context.startForegroundService(services);
             }
         } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -95,7 +94,7 @@ public class BluethotMibanCheking extends BroadcastReceiver {
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setText("Az alkalmazás nem működik: \n kérjük regisztráljon be, vagy jelentkezzen be");
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setTextColor(Color.WHITE);
                 hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewstatus.setBackgroundColor(Color.RED);
-                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("Ninncsen Miband eszköz csatlakozva");
+                hu.obuda.university.mibanddatacolector.Settings.mainActivity.textViewmibanddevice.setText("A Miband eszköz nem található.");
 
                 //   context.stopService(services);
             }
