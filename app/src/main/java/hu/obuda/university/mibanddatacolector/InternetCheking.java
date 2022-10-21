@@ -131,7 +131,7 @@ public class InternetCheking extends BroadcastReceiver {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher);
         mBuilder.setContentTitle("Az eszkoz lecsatlakozt az internetrol")
-                .setContentText("Kerem kapcsolja vissza az azkozt az internetre")
+                .setContentText("Kérem csatlakozzon az internetre.")
                 .setAutoCancel(false)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setGroup("com.android.example.WORK_EMAIL")
